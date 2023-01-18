@@ -41,8 +41,10 @@ function Important:AddPassive(Arguments, Type)
             ["AntiAnchor"] = true,
             ["AntiFling"] = true
         }
-    elseif Arguments and not Important["SpeedAndJumpSettings"] and Type == "SpeedAndJump" then
-        Important["SpeedAndJumpSettings"] = Arguments
+    elseif not Important["SpeedAndJumpSettings"] and Type == "SpeedAndJump" then
+        Important["SpeedAndJumpSettings"] = Arguments or {
+            ["Base"] = {}
+        }
     end
 end
 function Important:BindInput(Input, Function, Type)
