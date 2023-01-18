@@ -1,4 +1,5 @@
 local Important = {
+    ["Animations"] = game.HttpService:JSONDecode(game:HttpGet("https://raw.githubusercontent.com/theplantman/Modules/main/Important/Animations.json")),
     ["Audios"] = {},
     ["BindedInputs"] = {},
     ["ModeSettings"] = {
@@ -10,9 +11,18 @@ local Important = {
     ["PlayerSettings"] = {
         ["Active"] = false,
         ["Cooldowns"] = {}
-    },
-    ["Animations"] = game.HttpService:JSONDecode(game:HttpGet("https://raw.githubusercontent.com/theplantman/Modules/main/Important/Animations.json"))
+    }
 }
+function Important:AddCooldown(Lifetime, Name)
+    if Name then
+        Important["PlayerSettings"]["Cooldowns"][Name] = true
+        task.delay(Lifetime or 1, function()
+            if Important["PlayerSettings"]["Cooldowns"][Name] then
+                Important["PlayerSettings"]["Cooldowns"][Name] = nil
+            end
+        end)
+    end
+end
 function Important:AddPassive(Arguments, Type)
     if Important:CharacterLoaded() and not Important["DodgeSettings"] and (Type or "Dodge") == "Dodge" then
         Important["DodgeSettings"] = {
@@ -47,6 +57,14 @@ function Important:CharacterLoaded(Character)
     Character = Character or game.Players.LocalPlayer.Character
     if Character and Character:FindFirstChild("Humanoid") and Character.Humanoid.Health ~= 0 and Character:FindFirstChild("HumanoidRootPart") then
         return Character
+    end
+end
+function Important:ClearCooldowns(Blacklist)
+    Important["ClearCooldownBlacklistSettings"] = Blacklist or {}
+    for Index, Cooldown in pairs(Important["PlayerSettings"]["Cooldowns"]) do
+        if not table.find(Blacklist or {}, Index) then
+            Cooldown = nil
+        end
     end
 end
 function Important:DodgeToggle(Toggle)
@@ -238,6 +256,7 @@ function Important:SwitchModes(Function, Type)
     end
 end
 game.Players.LocalPlayer.CharacterAdded:Connect(function(Character)
+    Important:ClearCooldowns(Important["ClearCooldownBlacklistSettings"])
     task.wait(2)
     if Important["DodgeSettings"] and Important["DodgeSettings"]["Active"] then
         task.spawn(function()
