@@ -49,7 +49,7 @@ function Important:AddPassive(Arguments, Type)
 end
 function Important:BindInput(Input, Function, Type)
     if Input and Function then
-        if not Important[Input] then
+        if not Important["BindedInputs"][Input] then
             Important["BindedInputs"][Input] = {}
         end
         Important["BindedInputs"][Input][Type or "Began"] = Function
