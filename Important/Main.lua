@@ -11,7 +11,7 @@ local Important = {
         ["Active"] = false,
         ["Cooldowns"] = {}
     },
-    ["Animations"] = game.HttpService:JSONDecode(game:HttpGet(""))
+    ["Animations"] = game.HttpService:JSONDecode(game:HttpGet("https://raw.githubusercontent.com/theplantman/Modules/main/Important/Animations.json"))
 }
 function Important:AddPassive(Arguments, Type)
     if Important:CharacterLoaded() and not Important["DodgeSettings"] and (Type or "Dodge") == "Dodge" then
@@ -97,10 +97,14 @@ function Important:GetAbilityScript()
         end
     end
 end
-function Important:LoadAnimation(Id)
-    if Important:CharacterLoaded() and Id then
+function Important:LoadAnimation(IdOrName)
+    if Important:CharacterLoaded() and IdOrName then
         local Animation = Instance.new("Animation")
-        Animation.AnimationId = "rbxassetid://" .. Id
+        if Important["Animations"][IdOrName] then
+            Animation.AnimationId = "rbxassetid://" .. Important["Animations"][IdOrName]
+        else
+            Animation.AnimationId = "rbxassetid://" .. IdOrName
+        end 
         return Important:CharacterLoaded().Humanoid:LoadAnimation(Animation)
     end
 end
