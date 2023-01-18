@@ -121,7 +121,7 @@ function Important:LoadAnimation(IdOrName)
     if Important:CharacterLoaded() and IdOrName then
         local Animation = Instance.new("Animation")
         if Important["Animations"][IdOrName] then
-            Animation.AnimationId = "rbxassetid://" .. Important["Animations"][IdOrName]
+            Animation.AnimationId = Important["Animations"][IdOrName]
         else
             Animation.AnimationId = "rbxassetid://" .. IdOrName
         end 
