@@ -10,6 +10,7 @@ local Important = {
     },
     ["PlayerSettings"] = {
         ["Active"] = false,
+        ["Barrage"] = false,
         ["Cooldowns"] = {}
     }
 }
@@ -305,7 +306,7 @@ game.RunService.Stepped:Connect(function()
                 Important:CharacterLoaded().Humanoid.AutoRotate = true
                 Important:CharacterLoaded().Humanoid.PlatformStand = false
             end
-        elseif Important["Active"] and Important["SpeedAndJumpSettings"] then
+        elseif not Important["Active"] and Important["SpeedAndJumpSettings"] then
             for Index, Mode in pairs(Important["ModeSettings"]) do
                 if Important["SpeedAndJumpSettings"][Index] and Mode then
                     Important:CharacterLoaded().Humanoid.JumpPower = Important["SpeedAndJumpSettings"][Index]["JumpPower"] or 100
